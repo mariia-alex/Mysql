@@ -1,0 +1,74 @@
+mysql> create database users;
+Query OK, 1 row affected (0,16 sec)
+
+
+mysql> create table persons (
+    -> id int not null auto_increment primary key,
+    -> name varchar(50) not null default "people",
+    -> gender varchar(50) not null default " ",
+    -> mail varchar(50) not null default " "
+    -> );
+Query OK, 0 rows affected (0,60 sec)
+
+
+mysql> desc persons;
++--------+-------------+------+-----+---------+----------------+
+| Field  | Type        | Null | Key | Default | Extra          |
++--------+-------------+------+-----+---------+----------------+
+| id     | int         | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(50) | NO   |     | people  |                |
+| gender | varchar(50) | NO   |     |         |                |
+| mail   | varchar(50) | NO   |     |         |                |
++--------+-------------+------+-----+---------+----------------+
+4 rows in set (0,00 sec)
+
+
+mysql> insert into persons (id, gender, name, mail) values
+    -> (1, "m", "Vasya", "mmm@mail.com"), (2, "m", "Alex", "mmm@gmail.com"), (3, "m", "Alexey", "alexey@gmail.com"), (4, "f", "Helen", "hell@gmail.com"), (5,"f", "Jenny", "eachup@gmail.com"), (6, "f", "Lora", "tpicks@gmail.com");
+    
+Query OK, 6 rows affected (0,14 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+    
+
+
+mysql> select * from persons;
++----+--------+--------+------------------+
+| id | gender | name   | mail             |
++----+--------+--------+------------------+
+|  1 | m      | Vasya  | mmm@mail.com     |
+|  2 | m      | Alex   | mmm@gmail.com    |
+|  3 | m      | Alexey | alexey@gmail.com |
+|  4 | f      | Helen  | hell@gmail.com   |
+|  5 | f      | Jenny  | eachup@gmail.com |
+|  6 | f      | Lora   | tpicks@gmail.com |     
++----+--------+--------+------------------+
+6 rows in set (0,00 sec)
+
+
+mysql> select concat("We have ", (select count(*) from persons where gender = "m" group by gender), " boys!") as "" union select concat("We have ", (select count(*) from persons where gender = "f" group by gender), " girls!");
++------------------+
+|                  |
++------------------+
+| We have 3 boys!  |
+| We have 3 girls! |
++------------------+
+2 rows in set (0,01 sec)
+
+
+
+    
+mysql> select case 
+    -> when gender = "m" then (select concat("This is ", name,", he has email ",mail)) when gender = "f" then (select concat("This is ", name,", she has email ",mail)) end as"" from persons;
++-----------------------------------------------+
+|                                               |
++-----------------------------------------------+
+| This is Vasya, he has email mmm@mail.com      |
+| This is Alex, he has email mmm@gmail.com      |
+| This is Alexey, he has email alexey@gmail.com |
+| This is Helen, she has email hell@gmail.com   |
+| This is Jenny, she has email eachup@gmail.com |
+| This is Lora, she has email tpicks@gmail.com  |
++-----------------------------------------------+
+6 rows in set (0,00 sec)
+
+
